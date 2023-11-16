@@ -1,0 +1,96 @@
+1   DBMSL Assignment No 6
+ 2   Name - Himanshu Vijay Lonkar
+ 3   Roll No - C31149
+ 4   Batch - T3
+ 5   
+ 6   #Data in O_RollCall
+ 7   
+ 8   Program:-
+ 9   create table O_RollCall (rn int,name varchar(90),marks int);
+ 10   insert into O_RollCall values(5,'P',30);
+ 11   insert into O_RollCall values(1,'A',35);
+ 12   insert into O_RollCall values(4,'D',37);
+ 13   insert into O_RollCall values(3,'C',40);
+ 14   
+ 15   Output:-
+ 16   
+ 17   RNNAMEMARKS
+ 18   5P30
+ 19   1A35
+ 20   4D37
+ 21   3C40
+ 22   
+ 23   4 rows selected
+ 24   
+ 25   #Implicit Cursor:-
+ 26   
+ 27   Program:-
+ 28   
+ 29   BEGIN
+ 30   update O_RollCall Set marks=40 where marks between 35 and 39;
+ 31   If SQL%NOTFOUND Then
+ 32   dbms_output.put_line('No records updated');
+ 33   Else
+ 34   dbms_output.put_line('Records Updated:'|| SQL%rowcount);
+ 35   END If;
+ 36   END;
+ 37   
+ 38   Output:-
+ 39   
+ 40   Statement processed.
+ 41   Records Updated:2
+ 42   
+ 43   RNNAMEMARKS
+ 44   5P30
+ 45   1A40
+ 46   4C40
+ 47   3C40
+ 48   
+ 49   #Data in N_RollCall:-
+ 50   
+ 51   Program:-
+ 52   
+ 53   create table N_RollCall (rn int,name varchar(90),marks int);
+ 54   insert into N_RollCall values(1,'A',30);
+ 55   insert into N_RollCall values(2,'B',35);
+ 56   insert into N_RollCall values(3,'C',37);
+ 57   
+ 58   Output:-
+ 59   
+ 60   RNNAMEMARKS
+ 61   1A30
+ 62   2B35
+ 63   3C37
+ 64   
+ 65   #Explicit Cursor:-
+ 66   
+ 67   Program:-
+ 68   
+ 69   DECLARE70   s_rec N_RollCall%rowtype;
+ 71   Cursor cur_o is select * from O_RollCall;
+ 72   Cursor cur_n(rn_o int) is select * from N_RollCall where rn=rn_o;
+ 73   BEGIN
+ 74   
+ 75   For s_rec in cur_o
+ 76   LOOP
+ 77   open cur_n(s_rec.rn);
+ 78   Fetch cur_n into s_rec;
+ 79   If cur_n%NOTFOUND THEN
+ 80   Insert into N_RollCall values(s_rec.rn,s_rec.name,s_rec.marks);
+ 81   END If;
+ 82   Close cur_n;
+ 83   End LOOP;
+ 84   End;
+ 85   
+ 86   Output:-
+ 87   
+ 88   Statement processed.
+ 89   
+ 90   N_RollCall data:-
+ 91   
+ 92   RNNAMEMARKS
+ 93   1A30
+ 94   2B35
+ 95   3C37
+ 96   5P30
+ 97   4D40

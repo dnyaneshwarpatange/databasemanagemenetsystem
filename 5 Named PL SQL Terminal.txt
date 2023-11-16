@@ -1,0 +1,110 @@
+1   DBMSL Assignment No 5
+ 2   Name - Himanshu Vijay Lonkar
+ 3   Roll No - C31149
+ 4   Batch - T3
+ 5   
+ 6   Program:-
+ 7   
+ 8   1. Table Stud_Marks.
+ 9   
+ 10   mysql> create table Stud_Marks(name varchar(90),total_marks int);
+ 11   Query OK, 0 rows affected (0.03 sec)
+ 12   
+ 13   mysql> desc Stud_Marks;
+ 14   +-------------+-------------+------+-----+---------+-------+
+ 15   | Field       | Type        | Null | Key | Default | Extra |
+ 16   +-------------+-------------+------+-----+---------+-------+
+ 17   | name        | varchar(90) | YES  |     | NULL    |       |
+ 18   | total_marks | int         | YES  |     | NULL    |       |
+ 19   +-------------+-------------+------+-----+---------+-------+
+ 20   2 rows in set (0.03 sec)
+ 21   
+ 22   2. Table Result
+ 23   
+ 24   mysql> create table Result(Roll int,name varchar(90),class varchar(100);
+ 25   Query OK, 0 rows affected (0.03 sec)
+ 26   
+ 27   mysql> desc Result;
+ 28   +-------+--------------+------+-----+---------+-------+
+ 29   | Field | Type         | Null | Key | Default | Extra |
+ 30   +-------+--------------+------+-----+---------+-------+
+ 31   | Roll  | int          | YES  |     | NULL    |       |
+ 32   | Name  | varchar(90)  | YES  |     | NULL    |       |
+ 33   | Class | varchar(100) | YES  |     | NULL    |       |
+ 34   +-------+--------------+------+-----+---------+-------+
+ 35   3 rows in set (0.00 sec)
+ 36   3.Procedure proc_grade().
+ 37   
+ 38   mysql> delimiter //
+ 39   mysql> Create Procedure proc_grade (IN roll int,IN name varchar(90),IN marks int)
+ 40   -> BEGIN
+ 41   -> Declare class varchar(100);
+ 42   -> IF marks<=1500 and marks>=990 THEN set class='Distinction';
+ 43   -> ELSEIF marks <=989 and marks>=900 THEN set class='First Class';
+ 44   -> ELSEIF marks<=899 and marks>=825 THEN set class='Higher Second Class';
+ 45   -> ELSE set class='Fail';
+ 46   -> END IF;
+ 47   -> Insert into Stud_Marks values(name,marks);
+ 48   -> Insert into Result values(roll,name,class);
+ 49   -> END ; //
+ 50   Query OK, 0 rows affected (0.00 sec)
+ 51   
+ 52   mysql> delimiter ;
+ 53   
+ 54   4.Function total_count().
+ 55   
+ 56   mysql> delimiter //
+ 57   mysql> create function total_count() Returns int
+ 58   -> DETERMINISTIC BEGIN
+ 59   -> Declare count int;
+ 60   -> select count(Roll) into count from Result;
+ 61   -> Return count;
+ 62   -> End ; //
+ 63   Query OK, 0 rows affected (0.01 sec)
+ 64   
+ 65   mysql> delimiter ;
+ 66   
+ 67   5. Calling the procedure to enter the data into the tables.
+ 68   
+ 69   mysql> Call proc_grade(1,'ABC',990);70   Query OK, 1 row affected (0.01 sec)
+ 71   
+ 72   mysql> Call proc_grade(2,'PQR',900);
+ 73   Query OK, 1 row affected (0.01 sec)
+ 74   
+ 75   mysql> Call proc_grade(3,'LMN',825);
+ 76   Query OK, 1 row affected (0.01 sec)
+ 77   
+ 78   mysql> Call proc_grade(4,'XYZ',823);
+ 79   Query OK, 1 row affected (0.01 sec)
+ 80   
+ 81   mysql> select * from Stud_Marks;
+ 82   +------+-------------+
+ 83   | name | total_marks |
+ 84   +------+-------------+
+ 85   | ABC  |         990 |
+ 86   | PQR  |         900 |
+ 87   | LMN  |         825 |
+ 88   | XYZ  |         823 |
+ 89   +------+-------------+
+ 90   4 rows in set (0.00 sec)
+ 91   
+ 92   mysql> select * from Result;
+ 93   +------+------+---------------------+
+ 94   | Roll | Name | Class               |
+ 95   +------+------+---------------------+
+ 96   |    1 | ABC  | Distinction         |
+ 97   |    2 | PQR  | First Class         |
+ 98   |    3 | LMN  | Higher Second Class |
+ 99   |    4 | XYZ  | Fail                |
+ 100   +------+------+---------------------+
+ 101   4 rows in set (0.00 sec)
+ 102   
+ 103   6.Calling the Function.
+ 104   
+ 105   mysql> select total_count();
+ 106   +---------------+
+ 107   | total_count() |
+ 108   +---------------+
+ 109   |             4 |
+ 110   +---------------+
+ 111   1 row in set (0.01 sec)

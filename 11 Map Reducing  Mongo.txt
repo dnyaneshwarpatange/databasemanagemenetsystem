@@ -1,0 +1,140 @@
+1   DBMSL Assignment No 11
+ 2   Name:Himanshu Vijay Lonkar
+ 3   Batch:T3
+ 4   
+ 5   #Data:
+ 6   
+ 7   > db.orders.find().pretty()
+ 8   {
+ 9   "_id" : 1,
+ 10   "cust_id" : "A1",
+ 11   "DOR" : ISODate("2023-01-05T00:00:00Z"),
+ 12   "price" : 250,
+ 13   "items" : [
+ 14   {
+ 15   "sku" : "oranges",
+ 16   "qty" : 5,
+ 17   "price" : 10
+ 18   },
+ 19   {
+ 20   "sku" : "apples",
+ 21   "qty" : 5,
+ 22   "price" : 10
+ 23   }
+ 24   ],
+ 25   "status" : "P"
+ 26   }
+ 27   {
+ 28   "_id" : 2,
+ 29   "cust_id" : "A2",
+ 30   "DOR" : ISODate("2023-01-20T00:00:00Z"),
+ 31   "price" : 500,
+ 32   "items" : [
+ 33   {
+ 34   "sku" : "oranges",
+ 35   "qty" : 10,
+ 36   "price" : 10
+ 37   },
+ 38   {
+ 39   "sku" : "apples",
+ 40   "qty" : 10,
+ 41   "price" : 10
+ 42   }
+ 43   ],
+ 44   "status" : "P"
+ 45   }
+ 46   {
+ 47   "_id" : 3,
+ 48   "cust_id" : "A3",
+ 49   "DOR" : ISODate("2023-01-25T00:00:00Z"),
+ 50   "price" : 500,
+ 51   "items" : [
+ 52   {
+ 53   "sku" : "oranges",
+ 54   "qty" : 10,
+ 55   "price" : 10
+ 56   },
+ 57   {
+ 58   "sku" : "apples",
+ 59   "qty" : 10,
+ 60   "price" : 10
+ 61   }
+ 62   ],
+ 63   "status" : "D"
+ 64   }
+ 65   {
+ 66   "_id" : 4,
+ 67   "cust_id" : "A4",
+ 68   "DOR" : ISODate("2023-01-29T00:00:00Z"),
+ 69   "price" : 700,70   "items" : [
+ 71   {
+ 72   "sku" : "oranges",
+ 73   "qty" : 12,
+ 74   "price" : 25
+ 75   },
+ 76   {
+ 77   "sku" : "apples",
+ 78   "qty" : 10,
+ 79   "price" : 10
+ 80   }
+ 81   ],
+ 82   "status" : "D"
+ 83   }
+ 84   
+ 85   1.Display total price per customer
+ 86   
+ 87   > var map=function(){emit(this.cust_id,this.price);};
+ 88   
+ 89   > var reduce=function(cust_id,price){return Array.sum(price);};
+ 90   
+ 91   > db.orders.mapReduce(map,reduce,{out:'result1'})
+ 92   { "result" : "result1", "ok" : 1 }
+ 93   
+ 94   > db.result1.find()
+ 95   { "_id" : "A3", "value" : 500 }
+ 96   { "_id" : "A2", "value" : 500 }
+ 97   { "_id" : "A1", "value" : 250 }
+ 98   { "_id" : "A4", "value" : 700 }
+ 99   
+ 100   2.Display total price per customer having status=D.
+ 101   
+ 102   > var map=function(){emit(this.cust_id,this.price);};
+ 103   > var reduce=function(cust_id,price){return Array.sum(price);};
+ 104   
+ 105   > db.orders.mapReduce(map,reduce,{out:'result', query:{status:"D"}})
+ 106   { "result" : "result", "ok" : 1 }
+ 107   
+ 108   > db.result.find()
+ 109   { "_id" : "A3", "value" : 500 }
+ 110   { "_id" : "A4", "value" : 700 }
+ 111   
+ 112   3.Display total price for status ='P'.
+ 113   
+ 114   > var map=function(){emit(this.cust_id,this.price);};
+ 115   
+ 116   > var reduce=function(cust_id,price){return Array.sum(price);};
+ 117   
+ 118   > db.orders.mapReduce(map,reduce,{out:'result2', query:{status:"P"}})
+ 119   { "result" : "result2", "ok" : 1 }
+ 120   
+ 121   > db.result2.find()
+ 122   { "_id" : "A2", "value" : 500 }
+ 123   { "_id" : "A1", "value" : 250 }
+ 124   
+ 125   4.Finding count of all keys in orders collection.
+ 126   
+ 127   > var map=function(){for(var k in this){emit(k,{count:1})};};
+ 128   
+ 129   > var reduce=function(keys,count){total=0;for(i in 
+ count){total+=count[i].count};return {countK:total};}
+ 130   
+ 131   > db.orders.mapReduce(map,reduce,{out:'new3'})
+ 132   { "result" : "new3", "ok" : 1 }
+ 133   
+ 134   > db.new3.find()
+ 135   { "_id" : "DOR", "value" : { "countK" : 4 } }
+ 136   { "_id" : "cust_id", "value" : { "countK" : 4 } }
+ 137   { "_id" : "_id", "value" : { "countK" : 4 } }138   { "_id" : "price", "value" : { "countK" : 4 } }
+ 139   { "_id" : "status", "value" : { "countK" : 4 } }
+ 140   { "_id" : "items", "value" : { "countK" : 4 } }
+ 141

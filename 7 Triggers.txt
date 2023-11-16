@@ -1,0 +1,382 @@
+1   DBMSL Assignment No 7
+ 2   Name - Himanshu Vijay Lonkar
+ 3   Roll No - C31149
+ 4   Batch - T3
+ 5   
+ 6   Output:-
+ 7   
+ 8   1.Records into the table Library.
+ 9   
+ 10   mysql> create Table Library(B_id int,Title varchar(90),Edition 
+ varchar(30),no_of_copies int);
+ 11   Query OK, 0 rows affected (0.03 sec)
+ 12   
+ 13   mysql> desc Library;
+ 14   +--------------+-------------+------+-----+---------+-------+
+ 15   | Field        | Type        | Null | Key | Default | Extra |
+ 16   +--------------+-------------+------+-----+---------+-------+
+ 17   | B_id         | int         | YES  |     | NULL    |       |
+ 18   | Title        | varchar(90) | YES  |     | NULL    |       |
+ 19   | Edition      | varchar(30) | YES  |     | NULL    |       |
+ 20   | no_of_copies | int         | YES  |     | NULL    |       |
+ 21   +--------------+-------------+------+-----+---------+-------+
+ 22   4 rows in set (0.00 sec)
+ 23   
+ 24   mysql> Insert into Library values(1,'Wings of Fire','2',5),(2,'Call of 
+ Forest','5',5),(3,'The Magic Trees','3',5);
+ 25   Query OK, 3 rows affected (0.01 sec)
+ 26   Records: 3  Duplicates: 0  Warnings: 0
+ 27   
+ 28   mysql> select * from Library;
+ 29   +------+-----------------+---------+--------------+
+ 30   | B_id | Title           | Edition | no_of_copies |
+ 31   +------+-----------------+---------+--------------+
+ 32   |    1 | Wings of Fire   | 2       |            5 |
+ 33   |    2 | Call of Forest  | 5       |            5 |
+ 34   |    3 | The Magic Trees | 3       |            5 |
+ 35   +------+-----------------+---------+--------------+
+ 36   3 rows in set (0.00 sec)
+ 37   
+ 38   2.Table library_audit.
+ 39   
+ 40   mysql> create table Library_audit(B_id int,Title varchar(90),Edition 
+ varchar(30),no_of_copies int,date_of_mod date,Operation varchar(30),user 
+ varchar(50));
+ 41   Query OK, 0 rows affected (0.03 sec)
+ 42   
+ 43   mysql> desc Library_audit;
+ 44   +--------------+-------------+------+-----+---------+-------+
+ 45   | Field        | Type        | Null | Key | Default | Extra |
+ 46   +--------------+-------------+------+-----+---------+-------+
+ 47   | B_id         | int         | YES  |     | NULL    |       |
+ 48   | Title        | varchar(90) | YES  |     | NULL    |       |
+ 49   | Edition      | varchar(30) | YES  |     | NULL    |       |
+ 50   | no_of_copies | int         | YES  |     | NULL    |       |
+ 51   | date_of_mod  | date        | YES  |     | NULL    |       |
+ 52   | Operation    | varchar(30) | YES  |     | NULL    |       |
+ 53   | user         | varchar(50) | YES  |     | NULL    |       |
+ 54   +--------------+-------------+------+-----+---------+-------+
+ 55   7 rows in set (0.00 sec)
+ 56   
+ 57   3.Transaction Table.
+ 58   
+ 59   mysql> create table Transaction(Transaction_id int,B_id int,S_id int,Status 
+ varchar(10),irno_of_copies int,ir_date date);
+ 60   Query OK, 0 rows affected (0.03 sec)
+ 61   
+ 62   mysql> desc Transaction;
+ 63   +----------------+-------------+------+-----+---------+-------+
+ 64   | Field          | Type        | Null | Key | Default | Extra |65   +----------------+-------------+------+-----+---------+-------+
+ 66   | Transaction_id | int         | YES  |     | NULL    |       |
+ 67   | B_id           | int         | YES  |     | NULL    |       |
+ 68   | S_id           | int         | YES  |     | NULL    |       |
+ 69   | Status         | varchar(10) | YES  |     | NULL    |       |
+ 70   | irno_of_copies | int         | YES  |     | NULL    |       |
+ 71   | ir_date        | date        | YES  |     | NULL    |       |
+ 72   +----------------+-------------+------+-----+---------+-------+
+ 73   6 rows in set (0.00 sec)
+ 74   
+ 75   mysql> alter table Transaction modify Transaction_id int Auto_Increment;
+ 76   ERROR 1075 (42000): Incorrect table definition; there can be only one auto column 
+ and it must be defined as a key
+ 77   
+ 78   mysql> alter table Transaction add primary key(Transaction_id);
+ 79   Query OK, 0 rows affected (0.07 sec)
+ 80   Records: 0  Duplicates: 0  Warnings: 0
+ 81   
+ 82   mysql> desc Transaction;
+ 83   +----------------+-------------+------+-----+---------+-------+
+ 84   | Field          | Type        | Null | Key | Default | Extra |
+ 85   +----------------+-------------+------+-----+---------+-------+
+ 86   | Transaction_id | int         | NO   | PRI | NULL    |       |
+ 87   | B_id           | int         | YES  |     | NULL    |       |
+ 88   | S_id           | int         | YES  |     | NULL    |       |
+ 89   | Status         | varchar(10) | YES  |     | NULL    |       |
+ 90   | irno_of_copies | int         | YES  |     | NULL    |       |
+ 91   | ir_date        | date        | YES  |     | NULL    |       |
+ 92   +----------------+-------------+------+-----+---------+-------+
+ 93   6 rows in set (0.00 sec)
+ 94   
+ 95   mysql> alter table Transaction modify Transaction_id int Auto_Increment;
+ 96   Query OK, 0 rows affected (0.05 sec)
+ 97   Records: 0  Duplicates: 0  Warnings: 0
+ 98   
+ 99   4.Triggers
+ 100   
+ 101   (i)Trigger for update.
+ 102   
+ 103   mysql> delimiter //
+ 104   mysql> create trigger tri_update
+ 105   -> Before Update
+ 106   -> On Library
+ 107   -> For Each Row
+ 108   -> BEGIN
+ 109   -> insert into Library_audit 
+ values(old.B_id,old.Title,old.Edition,old.no_of_copies,current_date(),'Update
+ ',Current_User());
+ 110   -> END; //
+ 111   Query OK, 0 rows affected (0.04 sec)
+ 112   
+ 113   (ii)Trigger for delete
+ 114   
+ 115   mysql> create trigger tri_delete
+ 116   -> Before Delete
+ 117   -> On Library
+ 118   -> For Each Row
+ 119   -> BEGIN
+ 120   -> insert into Library_audit 
+ values(old.B_id,old.Title,old.Edition,old.no_of_copies,current_date(),'Delete
+ ',Current_User());
+ 121   -> END; //
+ 122   Query OK, 0 rows affected (0.01 sec)
+ 123   
+ 124   mysql> delimiter ;
+ 125   
+ 126   (iii)Triggers for Number of Copies.
+ 127   
+ 128   mysql> delimiter //129   mysql> create trigger tri_copies
+ 130   -> Before Insert
+ 131   -> On Transaction
+ 132   -> For Each Row
+ 133   -> Begin
+ 134   -> Declare copies int;
+ 135   -> select no_of_copies into copies from Library where B_id=New.B_id;
+ 136   -> If New.Status='I' and New.irno_of_copies > copies Then set 
+ New.irno_of_copies=copies;
+ 137   -> End If;
+ 138   -> End; //
+ 139   Query OK, 0 rows affected (0.01 sec)
+ 140   
+ 141   mysql> Delimiter ;
+ 142   
+ 143   (iv)Trigger for updating number of copies.
+ 144   
+ 145   mysql> create trigger tri_update_copies
+ 146   -> After Insert
+ 147   -> on Transaction
+ 148   -> For Each Row
+ 149   -> Begin
+ 150   -> Declare copies int;
+ 151   -> select no_of_copies into copies from Library where B_id=New.B_id;
+ 152   -> If New.Status='I' Then update Library set 
+ no_of_copies=(copies-New.irno_of_copies) where B_id=New.B_id;
+ 153   -> Else update Library set no_of_copies=(copies+New.irno_of_copies) where 
+ B_id=New.B_id;
+ 154   -> End If;
+ 155   -> End; //
+ 156   Query OK, 0 rows affected (0.01 sec)
+ 157   
+ 158   4.Issuing 3 books of Wings of Fire.
+ 159   
+ 160   mysql> Insert into Transaction (B_id,S_id,Status,irno_of_copies,ir_date) 
+ values(1,23,'I',3,Current_Date());
+ 161   Query OK, 1 row affected (0.03 sec)
+ 162   
+ 163   mysql> select * from Transaction;
+ 164   +----------------+------+------+--------+----------------+------------+
+ 165   | Transaction_id | B_id | S_id | Status | irno_of_copies | ir_date    |
+ 166   +----------------+------+------+--------+----------------+------------+
+ 167   |              1 |    1 |   23 | I      |              3 | 2023-09-22 |
+ 168   +----------------+------+------+--------+----------------+------------+
+ 169   1 row in set (0.00 sec)
+ 170   
+ 171   mysql> select * from Library;
+ 172   +------+-----------------+---------+--------------+
+ 173   | B_id | Title           | Edition | no_of_copies |
+ 174   +------+-----------------+---------+--------------+
+ 175   |    1 | Wings of Fire   | 2       |            2 |
+ 176   |    2 | Call of Forest  | 5       |            5 |
+ 177   |    3 | The Magic Trees | 3       |            5 |
+ 178   +------+-----------------+---------+--------------+
+ 179   3 rows in set (0.00 sec)
+ 180   
+ 181   mysql> select * from Library_audit;
+ 182   
+ +------+---------------+---------+--------------+-------------+-----------+----------
+ ------+
+ 183   | B_id | Title         | Edition | no_of_copies | date_of_mod | Operation | 
+ user           |
+ 184   
+ +------+---------------+---------+--------------+-------------+-----------+----------
+ ------+
+ 185   |    1 | Wings of Fire | 2       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 186   
+ +------+---------------+---------+--------------+-------------+-----------+----------------+
+ 187   1 row in set (0.00 sec)
+ 188   
+ 189   5.Issuing 6 books of Call of Forest.
+ 190   
+ 191   mysql> Insert into Transaction (B_id,S_id,Status,irno_of_copies,ir_date) 
+ values(2,43,'I',6,Current_Date());
+ 192   Query OK, 1 row affected (0.03 sec)
+ 193   
+ 194   mysql> select * from Transaction;
+ 195   +----------------+------+------+--------+----------------+------------+
+ 196   | Transaction_id | B_id | S_id | Status | irno_of_copies | ir_date    |
+ 197   +----------------+------+------+--------+----------------+------------+
+ 198   |              1 |    1 |   23 | I      |              3 | 2023-09-22 |
+ 199   |              2 |    2 |   43 | I      |              5 | 2023-09-22 |
+ 200   +----------------+------+------+--------+----------------+------------+
+ 201   2 rows in set (0.00 sec)
+ 202   
+ 203   mysql> select * from Library;
+ 204   +------+-----------------+---------+--------------+
+ 205   | B_id | Title           | Edition | no_of_copies |
+ 206   +------+-----------------+---------+--------------+
+ 207   |    1 | Wings of Fire   | 2       |            2 |
+ 208   |    2 | Call of Forest  | 5       |            0 |
+ 209   |    3 | The Magic Trees | 3       |            5 |
+ 210   +------+-----------------+---------+--------------+
+ 211   3 rows in set (0.00 sec)
+ 212   
+ 213   mysql> select * from Library_audit;
+ 214   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 215   | B_id | Title          | Edition | no_of_copies | date_of_mod | Operation | 
+ user           |
+ 216   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 217   |    1 | Wings of Fire  | 2       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 218   |    2 | Call of Forest | 5       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 219   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 220   2 rows in set (0.00 sec)
+ 221   
+ 222   6.Returning 3 copies of Wings of Fire.
+ 223   
+ 224   mysql> Insert into Transaction (B_id,S_id,Status,irno_of_copies,ir_date) 
+ values(1,23,'R',3,'2023-09-28');
+ 225   Query OK, 1 row affected (0.01 sec)
+ 226   
+ 227   mysql> select * from Transaction;
+ 228   +----------------+------+------+--------+----------------+------------+
+ 229   | Transaction_id | B_id | S_id | Status | irno_of_copies | ir_date    |
+ 230   +----------------+------+------+--------+----------------+------------+
+ 231   |              1 |    1 |   23 | I      |              3 | 2023-09-22 |
+ 232   |              2 |    2 |   43 | I      |              5 | 2023-09-22 |
+ 233   |              3 |    1 |   23 | R      |              3 | 2023-09-28 |
+ 234   +----------------+------+------+--------+----------------+------------+
+ 235   3 rows in set (0.00 sec)
+ 236   
+ 237   mysql> select * from Library;
+ 238   +------+-----------------+---------+--------------+
+ 239   | B_id | Title           | Edition | no_of_copies |
+ 240   +------+-----------------+---------+--------------+
+ 241   |    1 | Wings of Fire   | 2       |            5 |
+ 242   |    2 | Call of Forest  | 5       |            0 |
+ 243   |    3 | The Magic Trees | 3       |            5 |244   +------+-----------------+---------+--------------+
+ 245   3 rows in set (0.00 sec)
+ 246   
+ 247   mysql> select * from Library_audit;
+ 248   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 249   | B_id | Title          | Edition | no_of_copies | date_of_mod | Operation | 
+ user           |
+ 250   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 251   |    1 | Wings of Fire  | 2       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 252   |    2 | Call of Forest | 5       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 253   |    1 | Wings of Fire  | 2       |            2 | 2023-09-22  | Update    | 
+ root@localhost |
+ 254   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 255   3 rows in set (0.00 sec)
+ 256   
+ 257   7.Returning 3 copies of Call of Forest.
+ 258   
+ 259   mysql> Insert into Transaction (B_id,S_id,Status,irno_of_copies,ir_date) 
+ values(2,43,'R',3,'2023-09-28');
+ 260   Query OK, 1 row affected (0.01 sec)
+ 261   
+ 262   mysql> select * from Transaction;
+ 263   +----------------+------+------+--------+----------------+------------+
+ 264   | Transaction_id | B_id | S_id | Status | irno_of_copies | ir_date    |
+ 265   +----------------+------+------+--------+----------------+------------+
+ 266   |              1 |    1 |   23 | I      |              3 | 2023-09-22 |
+ 267   |              2 |    2 |   43 | I      |              5 | 2023-09-22 |
+ 268   |              3 |    1 |   23 | R      |              3 | 2023-09-28 |
+ 269   |              4 |    2 |   43 | R      |              3 | 2023-09-28 |
+ 270   +----------------+------+------+--------+----------------+------------+
+ 271   4 rows in set (0.00 sec)
+ 272   
+ 273   mysql> select * from Library;
+ 274   +------+-----------------+---------+--------------+
+ 275   | B_id | Title           | Edition | no_of_copies |
+ 276   +------+-----------------+---------+--------------+
+ 277   |    1 | Wings of Fire   | 2       |            5 |
+ 278   |    2 | Call of Forest  | 5       |            3 |
+ 279   |    3 | The Magic Trees | 3       |            5 |
+ 280   +------+-----------------+---------+--------------+
+ 281   3 rows in set (0.00 sec)
+ 282   
+ 283   mysql> select * from Library_audit;
+ 284   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 285   | B_id | Title          | Edition | no_of_copies | date_of_mod | Operation | 
+ user           |
+ 286   
+ +------+----------------+---------+--------------+-------------+-----------+---------
+ -------+
+ 287   |    1 | Wings of Fire  | 2       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 288   |    2 | Call of Forest | 5       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 289   |    1 | Wings of Fire  | 2       |            2 | 2023-09-22  | Update    | 
+ root@localhost |
+ 290   |    2 | Call of Forest | 5       |            0 | 2023-09-22  | Update    | 
+ root@localhost |
+ 291   
+ +------+----------------+---------+--------------+-------------+-----------+----------------+
+ 292   4 rows in set (0.00 sec)
+ 293   
+ 294   8.Deleting the book The Magic of the Trees.
+ 295   
+ 296   mysql> Delete from Library where B_id=3;
+ 297   Query OK, 1 row affected (0.01 sec)
+ 298   
+ 299   mysql> select * from Library;
+ 300   +------+----------------+---------+--------------+
+ 301   | B_id | Title          | Edition | no_of_copies |
+ 302   +------+----------------+---------+--------------+
+ 303   |    1 | Wings of Fire  | 2       |            5 |
+ 304   |    2 | Call of Forest | 5       |            3 |
+ 305   +------+----------------+---------+--------------+
+ 306   2 rows in set (0.00 sec)
+ 307   
+ 308   mysql> select * from Library_audit;
+ 309   
+ +------+-----------------+---------+--------------+-------------+-----------+--------
+ --------+
+ 310   | B_id | Title           | Edition | no_of_copies | date_of_mod | Operation | 
+ user           |
+ 311   
+ +------+-----------------+---------+--------------+-------------+-----------+--------
+ --------+
+ 312   |    1 | Wings of Fire   | 2       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 313   |    2 | Call of Forest  | 5       |            5 | 2023-09-22  | Update    | 
+ root@localhost |
+ 314   |    1 | Wings of Fire   | 2       |            2 | 2023-09-22  | Update    | 
+ root@localhost |
+ 315   |    2 | Call of Forest  | 5       |            0 | 2023-09-22  | Update    | 
+ root@localhost |
+ 316   |    3 | The Magic Trees | 3       |            5 | 2023-09-22  | Delete    | 
+ root@localhost |
+ 317   
+ +------+-----------------+---------+--------------+-------------+-----------+--------
+ --------+
+ 318   5 rows in set (0.00 sec)
+ 319   
+ 320

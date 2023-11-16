@@ -1,0 +1,161 @@
+1   DBMSL Assignment No 4
+ 2   Name - Himanshu Vijay Lonkar
+ 3   Roll No - C31149
+ 4   Batch - T3
+ 5   
+ 6   Program:-
+ 7   
+ 8   create table Borrower(Roll_no int,SName varchar(90),Date_of_Issue date,BName 
+ varchar(90),Status varchar(10));
+ 9   desc Borrower;
+ 10   insert into Borrower values(1,'ABC','14-November-2022','Wings of Fire','I');
+ 11   insert into Borrower values(2,'PQR','12-December-2022','The Magic Tree','I');
+ 12   insert into Borrower values(3,'LMN','01-January-2023','Wizard of Ice','I');
+ 13   insert into Borrower values(4,'EFG','05-May-2023','Weep of History','I');
+ 14   insert into Borrower values(5,'XYZ','09-September-2023','Call of the Forest','I');
+ 15   
+ 16   
+ 17   create table Fine(Roll_no int,CDate date,Amt float);
+ 18   desc Fine;
+ 19   
+ 20   Declare
+ 21   DOI Borrower.Date_of_Issue%type;
+ 22   rn Borrower.Roll_no%type :=5;
+ 23   name Borrower.BName%type :='Call of the Forest';
+ 24   date_diff int;
+ 25   invalid_rn exception;
+ 26   fine float;
+ 27   
+ 28   Begin
+ 29   If rn<=0 then
+ 30   Raise invalid_rn;
+ 31   End If;
+ 32   
+ 33   select Date_of_Issue into DOI from Borrower where Roll_no=rn and BName=name;
+ 34   date_diff := sysdate-DOI;
+ 35   
+ 36   If date_diff>15 and date_diff<30 then
+ 37   fine := ((date_diff-15)*5);
+ 38   End If;
+ 39   
+ 40   If date_diff>30 then
+ 41   fine := (15*5)+((date_diff-30)*50);
+ 42   
+ 43   End If;
+ 44   If Fine>0 then 
+ 45   insert into fine values(rn,sysdate,fine);
+ 46   End if;
+ 47   
+ 48   update Borrower set Status = 'R' where Roll_no=rn and BName=name;
+ 49   
+ 50   Exception
+ 51   
+ 52   When invalid_rnThen dbms_output.put_line('Invalid Roll Number');
+ 53   When No_Data_Found Then dbms_output.put_line('No data Found');
+ 54   When Too_Many_RowsThen dbms_output.put_line('Too Many Rows(Duplication)');
+ 55   When others Then dbms_output.put_line('Error');
+ 56   
+ 57   End; 
+ 58   
+ 59   select * from Fine;
+ 60   select * from Borrower;
+ 61   
+ 62   Output:-
+ 63   
+ 64   1.Data in the Borrower Table and Fine table.
+ 65   
+ 66   TABLE BORROWER
+ 67   ColumnNull?Type
+ 68   ROLL_NO - NUMBER69   SNAME - VARCHAR2(90)
+ 70   DATE_OF_ISSUE - DATE
+ 71   BNAME - VARCHAR2(90)
+ 72   STATUS - VARCHAR2(10)
+ 73   
+ 74   ROLL_NOSNAMEDATE_OF_ISSUEBNAMESTATUS
+ 75   1ABC14-NOV-22Wings of FireI
+ 76   2PQR12-DEC-22The Magic TreeI
+ 77   3LMN01-JAN-23Wizard of IceI
+ 78   4EFG05-MAY-23Weep of HistoryI
+ 79   5XYZ09-SEP-23Call of the ForestI
+ 80   
+ 81   TABLE FINE
+ 82   ColumnNull?Type
+ 83   ROLL_NO - NUMBER
+ 84   CDATE - DATE
+ 85   AMT - FLOAT(126)
+ 86   
+ 87   
+ 88   2.For Roll no =1
+ 89   
+ 90   Statement processed.
+ 91   select * from Fine;
+ 92   
+ 93   ROLL_NOCDATEAMT
+ 94   119-SEP-2314075
+ 95   
+ 96   select * from Borrower;
+ 97   
+ 98   ROLL_NOSNAMEDATE_OF_ISSUEBNAMESTATUS
+ 99   1ABC14-NOV-22Wings of FireR
+ 100   2PQR12-DEC-22The Magic TreeI
+ 101   3LMN01-JAN-23Wizard of IceI
+ 102   4EFG05-MAY-23Weep of HistoryI
+ 103   5XYZ09-SEP-23Call of the ForestI
+ 104   
+ 105   3.For Roll no =5
+ 106   
+ 107   Statement processed.
+ 108   select * from Fine;
+ 109   
+ 110   ROLL_NOCDATEAMT
+ 111   119-SEP-2314075
+ 112   
+ 113   select * from Borrower;
+ 114   
+ 115   ROLL_NOSNAMEDATE_OF_ISSUEBNAMESTATUS
+ 116   1ABC14-NOV-22Wings of FireR
+ 117   2PQR12-DEC-22The Magic TreeI
+ 118   3LMN01-JAN-23Wizard of IceI
+ 119   4EFG05-MAY-23Weep of HistoryI
+ 120   5XYZ09-SEP-23Call of the ForestR
+ 121   
+ 122   4. For Roll no =3
+ 123   
+ 124   Statement processed.
+ 125   select * from Fine;
+ 126   
+ 127   ROLL_NOCDATEAMT
+ 128   119-SEP-2314075
+ 129   319-SEP-2311675
+ 130   
+ 131   select * from Borrower;
+ 132   
+ 133   ROLL_NOSNAMEDATE_OF_ISSUEBNAMESTATUS
+ 134   1ABC14-NOV-22Wings of FireR
+ 135   2PQR12-DEC-22The Magic TreeI
+ 136   3LMN01-JAN-23Wizard of IceR
+ 137   4EFG05-MAY-23Weep of HistoryI138   5XYZ09-SEP-23Call of the ForestR
+ 139   
+ 140   5. For Invalid Roll No=-3.
+ 141   
+ 142   Statement processed.
+ 143   Invalid Roll Number
+ 144   
+ 145   6. For Roll no =4
+ 146   
+ 147   Statement processed.
+ 148   select * from Fine;
+ 149   
+ 150   ROLL_NOCDATEAMT
+ 151   119-SEP-2314075
+ 152   319-SEP-2311675
+ 153   419-SEP-235475
+ 154   
+ 155   select * from Borrower;
+ 156   
+ 157   ROLL_NOSNAMEDATE_OF_ISSUEBNAMESTATUS
+ 158   1ABC14-NOV-22Wings of FireR
+ 159   2PQR12-DEC-22The Magic TreeI
+ 160   3LMN01-JAN-23Wizard of IceR
+ 161   4EFG05-MAY-23Weep of HistoryR
+ 162   5XYZ09-SEP-23Call of the ForestR

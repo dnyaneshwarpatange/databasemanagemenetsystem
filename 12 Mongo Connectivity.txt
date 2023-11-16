@@ -1,0 +1,174 @@
+1   DBMSL Assignment No 12
+ 2   Name:Himanshu Vijay Lonkar
+ 3   Batch:T3
+ 4   
+ 5   Program:
+ 6   
+ 7   import pymongo
+ 8   from pymongo import MongoClient
+ 9   
+ 10   try:
+ 11       client=MongoClient('localhost',27017)
+ 12       print("Connected Successfully")
+ 13   
+ 14       mydatabase= client.B4
+ 15       mycollection=mydatabase.users
+ 16   
+ 17       def insert(id,name,age,city):
+ 18           records={'id':id,'name':name,'age':age,'city':city}
+ 19           result=mycollection.insert_one(records)
+ 20           print("Data is Inserted")
+ 21   
+ 22       def select():
+ 23           cursor=mycollection.find()
+ 24           for record in cursor:
+ 25               print(record)
+ 26   
+ 27       def update(id,name,age,city):
+ 28   
+ #result=mycollection.update_many({'id':id},{"$set":{{'name':name},{'age':age},{'c
+ ity':city}}})
+ 29           myquery = { "id": id }
+ 30           newvalues = { "$set": { 'name':name,'age':age,'city':city } } 
+ 31           result = mycollection.update_many(myquery, newvalues)
+ 32           print(result.matched_count,"documents updated")
+ 33           print("The Record is updated")
+ 34   
+ 35       def delete(id):
+ 36           myquery={'id':id}
+ 37           result=mycollection.delete_many(myquery)
+ 38           print(result.deleted_count,"documents deleted")
+ 39           print("Data Deleted")
+ 40   
+ 41       while True:
+ 42           print("#####MENU#####")
+ 43           print("1.Insert a Record")
+ 44           print("2.Display Records")
+ 45           print("3.Update a Record")
+ 46           print("4.Delete a Record")
+ 47           print("5.Exit")
+ 48   
+ 49           ch=int(input("Enter your choice:"))
+ 50   
+ 51           if(ch==1):
+ 52               id=int(input("Enter the Roll No:"))
+ 53               name=input("Enter the Name:")
+ 54               age=int(input("Enter the Age:"))
+ 55               city=input("Enter the City:")
+ 56               insert(id,name,age,city)
+ 57   
+ 58           if(ch==2):
+ 59               select()
+ 60   
+ 61           if(ch==3):
+ 62               id=int(input("Enter the Roll No:"))
+ 63               name=input("Enter the Name:")
+ 64               age=int(input("Enter the Age:"))
+ 65               city=input("Enter the City:")
+ 66               update(id,name,age,city)
+ 6768           if(ch==4):
+ 69               id=int(input("Enter the Roll No:"))
+ 70               delete(id)
+ 71   
+ 72           if(ch==5):
+ 73               exit()
+ 74   
+ 75           else:
+ 76               print("Enter the valid choice")
+ 77   
+ 78   except :
+ 79       print("Could not connect to MongoDB")
+ 80   
+ 81   Output:
+ 82   
+ 83   Connected to MySql server version 8.0.34
+ 84   
+ 85   1.Insert
+ 86   Connected Successfully
+ 87   #####MENU#####
+ 88   1.Insert a Record
+ 89   2.Display Records
+ 90   3.Update a Record
+ 91   4.Delete a Record
+ 92   5.Exit
+ 93   Enter your choice:1
+ 94   Enter the Roll No:1
+ 95   Enter the Name:ABC
+ 96   Enter the Age:20
+ 97   Enter the City:Pune
+ 98   Data is Inserted
+ 99   
+ 100   2.Select
+ 101   #####MENU#####
+ 102   1.Insert a Record
+ 103   2.Display Records
+ 104   3.Update a Record
+ 105   4.Delete a Record
+ 106   5.Exit
+ 107   Enter your choice:2
+ 108   {'_id': ObjectId('652ff6eb75a254db55d9e9eb'), 'id': 1, 'name': 'ABC', 'age': 20, 
+ 'city': 'Pune'}
+ 109   {'_id': ObjectId('652ff735090eb96f5696a08b'), 'id': 1, 'name': 'ABC', 'age': 20, 
+ 'city': 'Pune'}
+ 110   
+ 111   3.Update
+ 112   #####MENU#####
+ 113   1.Insert a Record
+ 114   2.Display Records
+ 115   3.Update a Record
+ 116   4.Delete a Record
+ 117   5.Exit
+ 118   Enter your choice:3
+ 119   Enter the Roll No:1
+ 120   Enter the Name:XYZ
+ 121   Enter the Age:25
+ 122   Enter the City:Mumbai
+ 123   2 documents updated
+ 124   The Record is updated
+ 125   
+ 126   #####MENU#####
+ 127   1.Insert a Record
+ 128   2.Display Records
+ 129   3.Update a Record
+ 130   4.Delete a Record
+ 131   5.Exit
+ 132   Enter your choice:2
+ 133   {'_id': ObjectId('652ff6eb75a254db55d9e9eb'), 'id': 1, 'name': 'XYZ', 'age': 25, 
+ 'city': 'Mumbai'}134   {'_id': ObjectId('652ff735090eb96f5696a08b'), 'id': 1, 'name': 'XYZ', 'age': 25, 
+ 'city': 'Mumbai'}
+ 135   
+ 136   4.Delete
+ 137   
+ 138   #####MENU#####
+ 139   1.Insert a Record
+ 140   2.Display Records
+ 141   3.Update a Record
+ 142   4.Delete a Record
+ 143   5.Exit
+ 144   Enter your choice:4
+ 145   Enter the Roll No:1
+ 146   2 documents deleted
+ 147   Data Deleted
+ 148   
+ 149   #####MENU#####
+ 150   1.Insert a Record
+ 151   2.Display Records
+ 152   3.Update a Record
+ 153   4.Delete a Record
+ 154   5.Exit
+ 155   Enter your choice:2
+ 156   
+ 157   5.Exit
+ 158   
+ 159   #####MENU#####
+ 160   1.Insert a Record
+ 161   2.Display Records
+ 162   3.Update a Record
+ 163   4.Delete a Record
+ 164   5.Exit
+ 165   Enter your choice:5
+ 166   Exited Successfully
+ 167   
+ 168   
+ 169   
+ 170

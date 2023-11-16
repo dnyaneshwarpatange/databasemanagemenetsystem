@@ -1,0 +1,446 @@
+1   DBMSL Assignment No 3
+ 2   Name - Himanshu Vijay Lonkar
+ 3   Roll No - C31149
+ 4   Batch - T3
+ 5   
+ 6   Output:-
+ 7   
+ 8   # Data into the Tables.
+ 9   
+ 10   I)mysql> desc branch_master;
+ 11   +-----------+--------------+------+-----+---------+-------+
+ 12   | Field     | Type         | Null | Key | Default | Extra |
+ 13   +-----------+--------------+------+-----+---------+-------+
+ 14   | branch_id | varchar(30)  | NO   | PRI | NULL    |       |
+ 15   | bname     | varchar(100) | YES  |     | NULL    |       |
+ 16   +-----------+--------------+------+-----+---------+-------+
+ 17   2 rows in set (0.01 sec)
+ 18   mysql> select *from branch_master;
+ 19   +-----------+----------+
+ 20   | branch_id | bname    |
+ 21   +-----------+----------+
+ 22   | B1        | Sangvi   |
+ 23   | B2        | Vadgoan  |
+ 24   | B3        | Aundh    |
+ 25   | B4        | Baramati |
+ 26   | B5        | Amegaon  |
+ 27   +-----------+----------+
+ 28   5 rows in set (0.02 sec)
+ 29   
+ 30   II)mysql> desc employee_master;
+ 31   +-----------+--------------+------+-----+---------+-------+
+ 32   | Field     | Type         | Null | Key | Default | Extra |
+ 33   +-----------+--------------+------+-----+---------+-------+
+ 34   | emp_no    | varchar(30)  | NO   | PRI | NULL    |       |
+ 35   | ename     | varchar(100) | YES  |     | NULL    |       |
+ 36   | branch_id | varchar(30)  | YES  | MUL | NULL    |       |
+ 37   | salary    | int          | YES  |     | NULL    |       |
+ 38   | dept      | varchar(80)  | YES  |     | NULL    |       |
+ 39   | manger_id | varchar(30)  | YES  | MUL | NULL    |       |
+ 40   +-----------+--------------+------+-----+---------+-------+
+ 41   6 rows in set (0.00 sec)
+ 42   mysql> select * from employee_master;
+ 43   +--------+----------+-----------+--------+------------+-----------+
+ 44   | emp_no | ename    | branch_id | salary | dept       | manger_id |
+ 45   +--------+----------+-----------+--------+------------+-----------+
+ 46   | E1     | Aniket   | B1        |  10000 | Loan       | E3        |
+ 47   | E10    | Vijay    | B5        |  12000 | Admin      | E2        |
+ 48   | E2     | Himanshu | B1        | 150000 | Admin      | NULL      |
+ 49   | E3     | Vinit    | B1        |  15000 | Admin      | E2        |
+ 50   | E4     | Prajyot  | B2        |  15000 | Admin      | E2        |
+ 51   | E5     | Abhay    | B2        |  10000 | NULL       | E4        |
+ 52   | E6     | Shubham  | B3        |  15000 | Admin      | E2        |
+ 53   | E7     | Nirmala  | B3        |  10000 | Investment | E6        |
+ 54   | E8     | Abhishek | B4        |  12000 | Admin      | E2        |
+ 55   | E9     | Abhinav  | B4        |  10000 | Loan       | E8        |
+ 56   +--------+----------+-----------+--------+------------+-----------+
+ 57   10 rows in set (0.00 sec)
+ 58   
+ 59   III)mysql> desc contact_details;
+ 60   +----------+-------------+------+-----+---------+-------+
+ 61   | Field    | Type        | Null | Key | Default | Extra |
+ 62   +----------+-------------+------+-----+---------+-------+
+ 63   | emp_id   | varchar(30) | YES  | MUL | NULL    |       |
+ 64   | email_id | varchar(80) | YES  |     | NULL    |       |
+ 65   | phnno    | int         | YES  |     | NULL    |       |
+ 66   +----------+-------------+------+-----+---------+-------+
+ 67   3 rows in set (0.00 sec)
+ 68   mysql> select *from contact_details;
+ 69   +--------+-----------+------------+70   | emp_id | email_id  | phnno      |
+ 71   +--------+-----------+------------+
+ 72   | E2     | himanshu@ |  987654321 |
+ 73   | E3     | vinit@    |       NULL |
+ 74   | E4     | prajyot@  |       NULL |
+ 75   | E5     | NULL      | 1234509876 |
+ 76   | E6     | NULL      |  678905321 |
+ 77   | E7     | NULL      |       NULL |
+ 78   | E8     | NULL      |       NULL |
+ 79   | E9     | abhinav@  |  123457890 |
+ 80   +--------+-----------+------------+
+ 81   10 rows in set (0.00 sec)
+ 82   
+ 83   IV) mysql> desc emp_address;
+ 84   +--------+-------------+------+-----+---------+-------+
+ 85   | Field  | Type        | Null | Key | Default | Extra |
+ 86   +--------+-------------+------+-----+---------+-------+
+ 87   | emp_id | varchar(30) | YES  | MUL | NULL    |       |
+ 88   | street | varchar(40) | YES  |     | NULL    |       |
+ 89   | city   | varchar(30) | YES  |     | NULL    |       |
+ 90   | state  | varchar(60) | YES  |     | NULL    |       |
+ 91   +--------+-------------+------+-----+---------+-------+
+ 92   4 rows in set (0.00 sec)
+ 93   mysql> select * from emp_address;
+ 94   +--------+-----------+---------+-------------+
+ 95   | emp_id | street    | city    | state       |
+ 96   +--------+-----------+---------+-------------+
+ 97   | E1     | Lane No 1 | Pune    | Maharashtra |
+ 98   | E2     | Lane no 4 | Pune    | Maharashtra |
+ 99   | E3     | XYZ       | Mumbai  | NULL        |
+ 100   | E4     | ABC       | Mumbai  | NULL        |
+ 101   | E6     | PQR       | NULL    | UP          |
+ 102   | E7     | LMN       | NULL    | MP          |
+ 103   | E8     | NULL      | NULL    | NULL        |
+ 104   | E9     | NULL      | NULL    | NULL        |
+ 105   | E5     | NULL      | Nahsik  | Maharashtra |
+ 106   +--------+-----------+---------+-------------+
+ 107   10 rows in set (0.00 sec)
+ 108   
+ 109   V)   mysql> desc branch_address;
+ 110   +-----------+-------------+------+-----+---------+-------+
+ 111   | Field     | Type        | Null | Key | Default | Extra |
+ 112   +-----------+-------------+------+-----+---------+-------+
+ 113   | branch_id | varchar(30) | YES  | MUL | NULL    |       |
+ 114   | city      | varchar(40) | YES  |     | NULL    |       |
+ 115   | state     | varchar(60) | YES  |     | NULL    |       |
+ 116   +-----------+-------------+------+-----+---------+-------+
+ 117   3 rows in set (0.00 sec)
+ 118   mysql> select * from branch_address;
+ 119   +-----------+---------+-------------+
+ 120   | branch_id | city    | state       |
+ 121   +-----------+---------+-------------+
+ 122   | B1        | Pune    | Maharashtra |
+ 123   | B2        | Nashik  | Maharashtra |
+ 124   | B3        | Bihar   | UP          |
+ 125   | B4        | Vadodra | Gujarat     |
+ 126   | B5        | Bhopal  | MP          |
+ 127   +-----------+---------+-------------+
+ 128   5 rows in set (0.00 sec)
+ 129   
+ 130   Queries:
+ 131   
+ 132   1.List the employee details along with the branch name in order of employee number.
+ 133   
+ 134   mysql> select * from employee_master INNER JOIN branch_master 
+ on(employee_master.branch_id=branch_master.branch_id) order by (emp_no);
+ 135   
+ +--------+----------+-----------+--------+------------+-----------+-----------+------
+ ----+136   | emp_no | ename    | branch_id | salary | dept       | manger_id | branch_id | 
+ bname    |
+ 137   
+ +--------+----------+-----------+--------+------------+-----------+-----------+------
+ ----+
+ 138   | E1     | Aniket   | B1        |  10000 | Loan       | E3        | B1        | 
+ Sangvi   |
+ 139   | E2     | Himanshu | B1        | 150000 | Admin      | NULL      | B1        | 
+ Sangvi   |
+ 140   | E3     | Vinit    | B1        |  15000 | Admin      | E2        | B1        | 
+ Sangvi   |
+ 141   | E4     | Prajyot  | B2        |  15000 | Admin      | E2        | B2        | 
+ Vadgoan  |
+ 142   | E5     | Abhay    | B2        |  10000 | NULL       | E4        | B2        | 
+ Vadgoan  |
+ 143   | E6     | Shubham  | B3        |  15000 | Admin      | E2        | B3        | 
+ Aundh    |
+ 144   | E7     | Nirmala  | B3        |  10000 | Investment | E6        | B3        | 
+ Aundh    |
+ 145   | E8     | Abhishek | B4        |  12000 | Admin      | E2        | B4        | 
+ Baramati |
+ 146   | E9     | Abhinav  | B4        |  10000 | Loan       | E8        | B4        | 
+ Baramati |
+ 147   | E10    | Vijay    | B5        |  12000 | Admin      | E2        | B5        | 
+ Amegaon  |
+ 148   
+ +--------+----------+-----------+--------+------------+-----------+-----------+------
+ ----+
+ 149   10 rows in set (0.00 sec)
+ 150   
+ 151   2.List the details of employee who belong to admin department along the branch name to 
+ which they belong.
+ 152   
+ 153   mysql> select * from employee_master INNER JOIN branch_master on 
+ (employee_master.branch_id=branch_master.branch_id and employee_master.dept='Admin');
+ 154   +--------+----------+-----------+--------+-------+-----------+-----------+----------+
+ 155   | emp_no | ename    | branch_id | salary | dept  | manger_id | branch_id | bname    |
+ 156   +--------+----------+-----------+--------+-------+-----------+-----------+----------+
+ 157   | E10    | Vijay    | B5        |  12000 | Admin | E2        | B5        | Amegaon  |
+ 158   | E2     | Himanshu | B1        | 150000 | Admin | NULL      | B1        | Sangvi   |
+ 159   | E3     | Vinit    | B1        |  15000 | Admin | E2        | B1        | Sangvi   |
+ 160   | E4     | Prajyot  | B2        |  15000 | Admin | E2        | B2        | Vadgoan  |
+ 161   | E6     | Shubham  | B3        |  15000 | Admin | E2        | B3        | Aundh    |
+ 162   | E8     | Abhishek | B4        |  12000 | Admin | E2        | B4        | Baramati |
+ 163   +--------+----------+-----------+--------+-------+-----------+-----------+----------+
+ 164   6 rows in set (0.00 sec)
+ 165   
+ 166   3.List the employee name along with phone number and city. 
+ 167   
+ 168   mysql> select employee_master.ename,contact_details.phnno,emp_address.city from 
+ employee_master INNER JOIN contact_details on 
+ (contact_details.emp_id=employee_master.emp_no) INNER JOIN emp_address on 
+ (emp_address.emp_id=employee_master.emp_no);
+ 169   +----------+------------+---------+
+ 170   | ename    | phnno      | city    |
+ 171   +----------+------------+---------+
+ 172   | Aniket   | 1234567890 | Pune    |
+ 173   | Vijay    |  758492013 | Vadodra |
+ 174   | Himanshu |  987654321 | Pune    |
+ 175   | Vinit    |       NULL | Mumbai  |
+ 176   | Prajyot  |       NULL | Mumbai  |
+ 177   | Abhay    | 1234509876 | Nahsik  |
+ 178   | Shubham  |  678905321 | NULL    |
+ 179   | Nirmala  |       NULL | NULL    |
+ 180   | Abhishek |       NULL | NULL    |
+ 181   | Abhinav  |  123457890 | NULL    |
+ 182   +----------+------------+---------+
+ 183   10 rows in set (0.00 sec)
+ 184185   4.List the employee name with the contact details if have or not have any.
+ 186   
+ 187   mysql> select employee_master.ename,contact_details.email_id,contact_details.phnno 
+ from employee_master LEFT OUTER JOIN contact_details on 
+ (contact_details.emp_id=employee_master.emp_no);
+ 188   +----------+-----------+------------+
+ 189   | ename    | email_id  | phnno      |
+ 190   +----------+-----------+------------+
+ 191   | Aniket   | aniket@   | 1234567890 |
+ 192   | Himanshu | himanshu@ |  987654321 |
+ 193   | Vinit    | vinit@    |       NULL |
+ 194   | Prajyot  | prajyot@  |       NULL |
+ 195   | Abhay    | NULL      | 1234509876 |
+ 196   | Shubham  | NULL      |  678905321 |
+ 197   | Nirmala  | NULL      |       NULL |
+ 198   | Abhishek | NULL      |       NULL |
+ 199   | Abhinav  | abhinav@  |  123457890 |
+ 200   | Vijay    | NULL      |  NULL      |
+ 201   +----------+-----------+------------+
+ 202   10 rows in set (0.00 sec)
+ 203   
+ 204   5.List the employee's contact details irrespective of whether they are working or have 
+ left.
+ 205   
+ 206   The records of employee number E1 and E10 are deleted.
+ 207   
+ 208   mysql> select 
+ employee_master.emp_no,employee_master.ename,contact_details.email_id,contact_details
+ .phnno from employee_master RIGHT OUTER JOIN contact_details on 
+ (contact_details.emp_id=employee_master.emp_no);
+ 209   +--------+----------+-----------+------------+
+ 210   | emp_no | ename    | email_id  | phnno      |
+ 211   +--------+----------+-----------+------------+
+ 212   | NULL   | NULL     | aniket@   | 1234567890 |
+ 213   | E2     | Himanshu | himanshu@ |  987654321 |
+ 214   | E3     | Vinit    | vinit@    |       NULL |
+ 215   | E4     | Prajyot  | prajyot@  |       NULL |
+ 216   | E5     | Abhay    | NULL      | 1234509876 |
+ 217   | E6     | Shubham  | NULL      |  678905321 |
+ 218   | E7     | Nirmala  | NULL      |       NULL |
+ 219   | E8     | Abhishek | NULL      |       NULL |
+ 220   | E9     | Abhinav  | abhinav@  |  123457890 |
+ 221   | NULL   | NULL     | vijay@    |  758492013 |
+ 222   +--------+----------+-----------+------------+
+ 223   10 rows in set (0.00 sec)
+ 224   
+ 225   6.Retrive the employee name and their respective manger name.
+ 226   
+ 227   mysql> select A.ename,B.ename as Manger_Name from employee_master A , 
+ employee_master B where A.manger_id=B.emp_no;
+ 228   +----------+-------------+
+ 229   | ename    | Manger_Name |
+ 230   +----------+-------------+
+ 231   | Vinit    | Himanshu    |
+ 232   | Prajyot  | Himanshu    |
+ 233   | Abhay    | Prajyot     |
+ 234   | Shubham  | Himanshu    |
+ 235   | Nirmala  | Shubham     |
+ 236   | Abhishek | Himanshu    |
+ 237   | Abhinav  | Abhishek    |
+ 238   +----------+-------------+
+ 239   7 rows in set (0.00 sec)
+ 240   
+ 241   7.List the employee names who works at vadgoan branch along with the city of that 
+ employee.
+ 242   
+ 243   mysql> select ename,city,bname from employee_master INNER JOIN emp_address INNER 
+ JOIN branch_master on( bname='Vadgoan' and emp_no=emp_id and 
+ employee_master.branch_id=branch_master.branch_id);244   +---------+--------+---------+
+ 245   | ename   | city   | bname   |
+ 246   +---------+--------+---------+
+ 247   | Prajyot | Mumbai | Vadgoan |
+ 248   | Abhay   | Nahsik | Vadgoan |
+ 249   +---------+--------+---------+
+ 250   2 rows in set (0.00 sec)
+ 251   
+ 252   8.List the employee details along with the branch name using natural join.
+ 253   
+ 254   mysql> select * from employee_master NATURAL JOIN branch_master;
+ 255   +-----------+--------+----------+--------+------------+-----------+----------+
+ 256   | branch_id | emp_no | ename    | salary | dept       | manger_id | bname    |
+ 257   +-----------+--------+----------+--------+------------+-----------+----------+
+ 258   | B1        | E2     | Himanshu | 150000 | Admin      | NULL      | Sangvi   |
+ 259   | B1        | E3     | Vinit    |  15000 | Admin      | E2        | Sangvi   |
+ 260   | B2        | E4     | Prajyot  |  15000 | Admin      | E2        | Vadgoan  |
+ 261   | B2        | E5     | Abhay    |  10000 | NULL       | E4        | Vadgoan  |
+ 262   | B3        | E6     | Shubham  |  15000 | Admin      | E2        | Aundh    |
+ 263   | B3        | E7     | Nirmala  |  10000 | Investment | E6        | Aundh    |
+ 264   | B4        | E8     | Abhishek |  12000 | Admin      | E2        | Baramati |
+ 265   | B4        | E9     | Abhinav  |  10000 | Loan       | E8        | Baramati |
+ 266   +-----------+--------+----------+--------+------------+-----------+----------+
+ 267   8 rows in set (0.00 sec)
+ 268   
+ 269   9.Find the employee who works at vadgoan branch with salaries more than 10000 and list 
+ the employee name with the streets they live in.
+ 270   
+ 271   mysql>  select ename,street,salary from employee_master INNER JOIN emp_address INNER 
+ JOIN branch_master on (emp_no=emp_id) and (branch_master.branch_id = 
+ employee_master.branch_id)and(bname='Vadgoan') and salary>=10000;
+ 272   +---------+--------+--------+
+ 273   | ename   | street | salary |
+ 274   +---------+--------+--------+
+ 275   | Prajyot | ABC    |  15000 |
+ 276   | Abhay   | NULL   |  10000 |
+ 277   +---------+--------+--------+
+ 278   2 rows in set (0.00 sec)
+ 279   
+ 280   10.Find the employee who live and works in same city.
+ 281   
+ 282   mysql>  select ename,emp_address.city,branch_address.city from employee_master INNER 
+ JOIN emp_address INNER JOIN branch_address on(emp_no=emp_id and 
+ emp_address.city=branch_address.city);
+ 283   +----------+------+------+
+ 284   | ename    | city | city |
+ 285   +----------+------+------+
+ 286   | Himanshu | Pune | Pune |
+ 287   +----------+------+------+
+ 288   1 row in set (0.00 sec)
+ 289   
+ 290   11. Find the employee whose salary are more than the salary of everybody who works at 
+ vadgoan branch.
+ 291   
+ 292   mysql> select ename from employee_master where salary > all (select salary from 
+ employee_master INNER JOIN branch_master ON bname='Vadgoan' and 
+ branch_master.branch_id=employee_master.branch_id);
+ 293   +----------+
+ 294   | ename    |
+ 295   +----------+
+ 296   | Himanshu |
+ 297   +----------+
+ 298   1 row in set (0.00 sec)
+ 299   
+ 300   12.Create a total_employee view which will contain total employees.
+ 301   
+ 302   mysql> create view total_emp_view as select 
+ emp_no,ename,employee_master.branch_id,bname,salary,dept,manger_id from 
+ employee_master INNER JOIN branch_master on(branch_master.branch_id=employee_master.branch_id);
+ 303   Query OK, 0 rows affected (0.01 sec)
+ 304   
+ 305   mysql> show tables;
+ 306   +-----------------+
+ 307   | Tables_in_bank  |
+ 308   +-----------------+
+ 309   | branch_address  |
+ 310   | branch_master   |
+ 311   | contact_details |
+ 312   | emp_address     |
+ 313   | employee_master |
+ 314   | total_emp_view  |
+ 315   +-----------------+
+ 316   7 rows in set (0.00 sec)
+ 317   
+ 318   mysql> select * from total_emp_view;
+ 319   +--------+----------+-----------+----------+--------+------------+-----------+
+ 320   | emp_no | ename    | branch_id | bname    | salary | dept       | manger_id |
+ 321   +--------+----------+-----------+----------+--------+------------+-----------+
+ 322   | E2     | Himanshu | B1        | Sangvi   | 150000 | Admin      | NULL      |
+ 323   | E3     | Vinit    | B1        | Sangvi   |  15000 | Admin      | E2        |
+ 324   | E4     | Prajyot  | B2        | Vadgoan  |  15000 | Admin      | E2        |
+ 325   | E5     | Abhay    | B2        | Vadgoan  |  10000 | NULL       | E4        |
+ 326   | E6     | Shubham  | B3        | Aundh    |  15000 | Admin      | E2        |
+ 327   | E7     | Nirmala  | B3        | Aundh    |  10000 | Investment | E6        |
+ 328   | E8     | Abhishek | B4        | Baramati |  12000 | Admin      | E2        |
+ 329   | E9     | Abhinav  | B4        | Baramati |  10000 | Loan       | E8        |
+ 330   +--------+----------+-----------+----------+--------+------------+-----------+
+ 331   8 rows in set (0.00 sec)
+ 332   
+ 333   13.Update total_employee view which will contain total employees at each branch.
+ 334   
+ 335   mysql> alter view total_emp_view as select count(distinct emp_no),bname from 
+ employee_master INNER JOIN branch_master on( 
+ employee_master.branch_id=branch_master.branch_id) group by(bname);
+ 336   Query OK, 0 rows affected (0.01 sec)
+ 337   
+ 338   mysql> select * from total_emp_view;
+ 339   +------------------------+----------+
+ 340   | count(distinct emp_no) | bname    |
+ 341   +------------------------+----------+
+ 342   |                      2 | Aundh    |
+ 343   |                      2 | Baramati |
+ 344   |                      2 | Sangvi   |
+ 345   |                      2 | Vadgoan  |
+ 346   +------------------------+----------+
+ 347   4 rows in set (0.00 sec)
+ 348   
+ 349   14.List the branch name where employee have a salary more than 100000.
+ 350   
+ 351   mysql> select bname,salary from employee_master INNER JOIN branch_master on 
+ (branch_master.branch_id=employee_master.branch_id and salary>=100000);
+ 352   +--------+--------+
+ 353   | bname  | salary |
+ 354   +--------+--------+
+ 355   | Sangvi | 150000 |
+ 356   +--------+--------+
+ 357   1 row in set (0.00 sec)
+ 358   
+ 359   15.Create a View which will show the avreage salary and the total salary at each branch.
+ 360   
+ 361   mysql> create view total_emp_view as select bname,avg(salary) AS 
+ Average_Salary,sum(salary) AS Total_Salary from employee_master INNER JOIN 
+ branch_master on (employee_master.branch_id=branch_master.branch_id) group by(bname);
+ 362   Query OK, 0 rows affected (0.01 sec)
+ 363   
+ 364   mysql> show tables;
+ 365   +-----------------+366   | Tables_in_bank  |
+ 367   +-----------------+
+ 368   | branch_address  |
+ 369   | branch_master   |
+ 370   | contact_details |
+ 371   | emp_address     |
+ 372   | employee_master |
+ 373   | total_emp_view  |
+ 374   +-----------------+
+ 375   6 rows in set (0.00 sec)
+ 376   
+ 377   mysql> select * from total_emp_view;
+ 378   +----------+----------------+--------------+
+ 379   | bname    | Average_Salary | Total_Salary |
+ 380   +----------+----------------+--------------+
+ 381   | Sangvi   |     82500.0000 |       165000 |
+ 382   | Vadgoan  |     12500.0000 |        25000 |
+ 383   | Aundh    |     12500.0000 |        25000 |
+ 384   | Baramati |     11000.0000 |        22000 |
+ 385   +----------+----------------+--------------+
+ 386   4 rows in set (0.00 sec)
+ 387   
+ 388   16.Find the employee who do not have a job at vadgoan branch.
+ 389   
+ 390   mysql> select emp_no,ename,salary,dept,manger_id,branch_master.branch_id,bname from 
+ employee_master INNER JOIN branch_master on ( 
+ branch_master.branch_id=employee_master.branch_id and bname!='Vadgoan');
+ 391   +--------+----------+--------+------------+-----------+-----------+----------+
+ 392   | emp_no | ename    | salary | dept       | manger_id | branch_id | bname    |
+ 393   +--------+----------+--------+------------+-----------+-----------+----------+
+ 394   | E2     | Himanshu | 150000 | Admin      | NULL      | B1        | Sangvi   |
+ 395   | E3     | Vinit    |  15000 | Admin      | E2        | B1        | Sangvi   |
+ 396   | E6     | Shubham  |  15000 | Admin      | E2        | B3        | Aundh    |
+ 397   | E7     | Nirmala  |  10000 | Investment | E6        | B3        | Aundh    |
+ 398   | E8     | Abhishek |  12000 | Admin      | E2        | B4        | Baramati |
+ 399   | E9     | Abhinav  |  10000 | Loan       | E8        | B4        | Baramati |
+ 400   +--------+----------+--------+------------+-----------+-----------+----------+
+ 401   6 rows in set (0.00 sec)

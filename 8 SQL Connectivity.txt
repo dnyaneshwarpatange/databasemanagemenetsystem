@@ -1,0 +1,176 @@
+1	DBMSL Assignment No 8
+2	Name:Shivani Lahu Lande
+3	Batch:T3 4  
+5   Program:
+6   
+7	import mysql.connector
+8	from mysql.connector import Error
+9	from tabulate import tabulate
+10   	try:
+11   
+12	connection=mysql.connector.connect(host="localhost",database="Connect",user="root ",password="lonkar#1411")
+13	if connection.is_connected():
+14	db_info=connection.get_server_info()
+15	print("Connected to MySql server version",db_info)
+16   
+17   
+18	def insert(id,name,age,city):
+19	res=connection.cursor()
+20	sql="Insert into user values(%s,%s,%s,%s);"
+21	values=(id,name,age,city)
+22	exu=res.execute(sql,values)
+23	connection.commit()
+24	res.close()
+25	print("Data is Inserted")
+26   
+27	def select():
+28	res=connection.cursor()
+29	sql="Select * from user"
+30	res.execute(sql)
+31	#record=exu.fetchall()
+32	print(tabulate(res.fetchall(),headers=('Roll No','Name','Age','City')))
+33	res.close()
+34   
+35   
+36	def delete(id):
+37	res=connection.cursor()
+38	sql="Delete from user where id=%s;"
+39	values=(id)
+40	exu=res.execute(sql,values)
+41	connection.commit()
+42	res.close()
+43	print("Data Deleted")
+44   
+45   
+46	def update(id,name,age,city):
+47	res=connection.cursor()
+48	sql="Update user set name=%s,age=%s,city=%s where id=%s"
+49	values=(name,age,city,id)
+50	exu=res.execute(sql,values)
+51	connection.commit()
+52	res.close()
+53	print("The Record is updated")
+54   
+55	while True:
+56	print("#####MENU#####")
+57	print("1.Insert a Record")
+58	print("2.Display Records")
+59	print("3.Update a Record")
+60	print("4.Delete a Record")
+61   
+62   	ch=int(input("Enter your choice:"))
+63   
+64	if(ch==1):
+65	id=int(input("Enter the Roll No:"))
+66	name=input("Enter the Name:")
+67	age=int(input("Enter the Age:"))
+68	city=input("Enter the City:")
+69	insert(id,name,age,city)
+70   
+71	if(ch==2):
+72	select()
+73   
+74	if(ch==3):
+75	id=int(input("Enter the Roll No:"))
+76	name=input("Enter the Name:")
+77	age=int(input("Enter the Age:"))
+78	city=input("Enter the City:")
+79	update(id,name,age,city)
+80   
+81	if(ch==4):
+82	id=int(input("Enter the Roll No:"))
+83	delete('id')
+84   
+85	if(ch==5):
+86	quit()
+87   
+88	if(ch>5):
+89	print("Enter the valid choice") 90   	except Error as e:
+91   	print("Error while connection to MySql",e)
+92   
+93   	finally:
+94   
+95	if connection.is_connected():
+96	connection.close()
+97	print("MySql connection is closed")
+98	99   Output:
+100   
+101   	Connected to MySql server version 8.0.34
+102   
+103	1 .Insert
+104	#####MENU#####
+105	1 .Insert a Record
+106	2 .Display Records
+107	3 .Update a Record
+108	4 .Delete a Record
+109	Enter your choice:1
+110	Enter the Roll No:1
+111	Enter the Name:ABC
+112	Enter the Age:20
+113	Enter the City:Pune
+114	Data is Inserted
+115   
+116	2 .Select
+117	#####MENU#####
+118	1 .Insert a Record
+119	2 .Display Records
+120	3 .Update a Record
+121	4 .Delete a Record
+122	Enter your choice:2
+123	Roll No  Name      Age  City
+124	---------  ------  -----  -----125   	1   ABC        20  Pune
+126   
+127	3 .Update
+128	#####MENU#####
+129	1 .Insert a Record
+130	2 .Display Records
+131	3 .Update a Record
+132	4 .Delete a Record
+133	Enter your choice:3
+134	Enter the Roll No:1
+135	Enter the Name:XYZ
+136	Enter the Age:25
+137	Enter the City:Mumbai
+138	The Record is updated
+139   
+140	#####MENU#####
+141	1 .Insert a Record
+142	2 .Display Records
+143	3 .Update a Record
+144	4 .Delete a Record
+145	5 .Exit
+146	Enter your choice:2
+147	Roll No  Name      Age  City
+148	---------  ------  -----  -----149   1   XYZ        25  Mumbai
+150   
+151   	4 .Delete
+152   
+153	#####MENU#####
+154	1 .Insert a Record
+155	2 .Display Records
+156	3 .Update a Record
+157	4 .Delete a Record
+158	5 .Exit
+159	Enter your choice:4
+160	Enter the Roll No:1
+161	Data Deleted
+162	#####MENU#####
+163	1 .Insert a Record
+164	2 .Display Records
+165	3 .Update a Record
+166	4 .Delete a Record
+167	5 .Exit
+168	Enter your choice:2
+169	Roll No    Name    Age    City
+170	---------  ------  -----  -----171   
+172   	5 .Exit
+173   
+174	#####MENU#####
+175	1 .Insert a Record
+176	2 .Display Records
+177	3 .Update a Record
+178	4 .Delete a Record
+179	5 .Exit
+180	Enter your choice:5
+181	MySql connection is closed
+
