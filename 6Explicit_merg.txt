@@ -1,0 +1,29 @@
+create table O_RollCall (rn int,name varchar(90),marks int);
+ insert into O_RollCall values(5,'P',30);
+ insert into O_RollCall values(1,'A',35);
+insert into O_RollCall values(4,'D',37);
+insert into O_RollCall values(3,'C',40);
+drop table O_RollCall;
+
+create table N_RollCall (rn int,name varchar(90),marks int);
+ insert into N_RollCall values(1,'A',30);
+ insert into N_RollCall values(2,'B',35);
+ insert into N_RollCall values(3,'C',37);
+
+drop table N_RollCall;
+DECLARE
+ s_rec N_RollCall%rowtype;
+ Cursor cur_o is select * from O_RollCall;
+ Cursor cur_n(rn_o int) is select * from N_RollCall where rn=rn_o;
+ BEGIN
+ For s_rec in cur_o
+ LOOP
+ open cur_n(s_rec.rn);
+ Fetch cur_n into s_rec;
+ If cur_n%NOTFOUND THEN
+ Insert into N_RollCall values(s_rec.rn,s_rec.name,s_rec.marks);
+ END If;
+ Close cur_n;
+ End LOOP;
+ End;
+select * from N_RollCall;

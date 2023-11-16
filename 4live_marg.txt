@@ -1,0 +1,48 @@
+create table Borrower(Roll_no int,SName varchar(90),Date_of_Issue date,BName varchar(90),Status varchar(10));
+ desc Borrower;
+ insert into Borrower values(1,'ABC','14-November-2022','Wings of Fire','I');
+ insert into Borrower values(2,'PQR','12-December-2022','The Magic Tree','I');
+ insert into Borrower values(3,'LMN','01-January-2023','Wizard of Ice','I');
+ insert into Borrower values(4,'EFG','05-May-2023','Weep of History','I');
+ insert into Borrower values(5,'XYZ','09-September-2023','Call of the Forest','I');
+ drop table Borrower;
+drop table fine;
+ 
+ create table Fine(Roll_no int,CDate date,Amt float);
+ desc Fine;
+ Declare
+DOI Borrower.Date_of_Issue%type;
+ rn Borrower.Roll_no%type :=5;
+ name Borrower.BName%type :='Call of the Forest';
+ date_diff int;
+ invalid_rn exception;
+ fine float;
+ 
+ Begin
+ If rn<=0 then
+ Raise invalid_rn;
+ End If;
+ 
+ select Date_of_Issue into DOI from Borrower where Roll_no=rn and BName=name;
+ date_diff := sysdate-DOI;
+ 
+ If date_diff>15 and date_diff<30 then
+ fine := ((date_diff-15)*5);
+ End If;
+ 
+ If date_diff>30 then
+ fine := (15*5)+((date_diff-30)*50); 
+ End If;
+If Fine>0 then 
+ insert into fine values(rn,sysdate,fine);
+ End if; 
+ update Borrower set Status = 'R' where Roll_no=rn and BName=name;
+ Exception
+
+ When invalid_rn Then dbms_output.put_line('Invalid Roll Number');
+ When No_Data_Found Then dbms_output.put_line('No data Found');
+ When Too_Many_Rows Then dbms_output.put_line('Too Many Rows(Duplication)');
+ When others Then dbms_output.put_line('Error'); 
+ End;
+select * from fine;
+select * from Borrower;
