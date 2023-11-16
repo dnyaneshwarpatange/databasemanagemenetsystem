@@ -1,0 +1,14 @@
+create table O_RollCall (rn int,name varchar(90),marks int);
+ insert into O_RollCall values(5,'P',30);
+ insert into O_RollCall values(1,'A',35);
+insert into O_RollCall values(4,'D',37);
+insert into O_RollCall values(3,'C',40);
+drop table O_RollCall;
+BEGIN
+ update O_RollCall Set marks=40 where marks between 35 and 39;
+ If SQL%NOTFOUND Then
+ dbms_output.put_line('No records updated');
+ Else
+ dbms_output.put_line('Records Updated:'|| SQL%rowcount);
+ END If;
+ END;
